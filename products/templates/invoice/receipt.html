@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{ invoice.invoice_no }}</title>
+  <style>
+    body {
+      font-family: monospace, sans-serif;
+      font-size: 12px;
+      width: 80mm;      /* مقاس الطابعة الحرارية */
+      margin: 0 auto;
+    }
+    .center { text-align: center; }
+    .right  { text-align: right; }
+    .bold   { font-weight: bold; }
+    hr { border: none; border-top: 1px dashed #000; margin: 4px 0; }
+
+    table { width: 100%; border-collapse: collapse; }
+    td, th { padding: 2px 0; }
+    th { border-bottom: 1px solid #000; }
+  </style>
+</head>
+<body>
+  <div class="center bold">
+    {{ invoice.branch.name }} <br/>
+    {{ invoice.tenant.id }}
+  </div>
+
+  <div class="center">
+    Invoice: {{ invoice.invoice_no }}<br/>
+    Order: {{ invoice.order_id }}<br/>
+    Date: {{ invoice.date_created|date:"Y-m-d H:i" }}
+  </div>
+
+  <hr/>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="right">Qty</th>
+        <th class="right">Price</th>
+        <th class="right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in lines %}
+      <tr>
+        <td>{{ l.name }}</td>
+        <td class="right">{{ l.qty }}</td>
+        <td class="right">{{ l.unit_price }}</td>
+        <td class="right">{{ l.line_total }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr/>
+
+  <table>
+    <tr><td>Subtotal</td><td class="right">{{ invoice.subtotal }}</td></tr>
+    <tr><td>Tax</td><td class="right">{{ invoice.tax }}</td></tr>
+    <tr class="bold"><td>Total</td><td class="right">{{ invoice.total }} {{ invoice.currency }}</td></tr>
+  </table>
+
+  <hr/>
+  <div class="center">Payment: {{ invoice.payment_method|upper }}</div>
+  <div class="center">شكراً لتعاملكم معنا 🌟</div>
+</body>
+</html>
